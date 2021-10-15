@@ -1,10 +1,27 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { SwPush } from "@angular/service-worker";
+import { ApiService } from "./api.service";
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
+  template: `
+      <button class="button button-primary" (click)="subscribeToNotifications()">
+        Subscribe
+      </button>
+`})
 export class AppComponent {
-  title = 'epitechpwa';
+
+  readonly VAPID_PUBLIC_KEY = "BCGzfc0aSeXUFIDMxrSXGHY6RkETZ91FeHLp0MkP31B3GwFATlLeP6MhlrjsuPuv4tvElWYNjDsJguMxD0YLrTE";
+
+  constructor(
+      private swPush: SwPush,private ApiService:ApiService) {}
+
+  subscribeToNotifications() {
+
+      this.swPush.requestSubscription({
+          serverPublicKey: this.VAPID_PUBLIC_KEY
+      })
+      .then(sub => this.ApiService.sendToken(sub).subscribe(res => {console.log(res)}))
+      .catch(err => console.error("Could not subscribe to notifications", err));
+  }
 }

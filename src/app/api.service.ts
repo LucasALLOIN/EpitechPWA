@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
   constructor(private http: HttpClient) { }
-  sendToken(token): Observable<any> {
+  sendToken(token: any): Observable<any> {
     //ici url backend heroku
     return this.http.post('https://huihuihuhuhjhghjf.herokuapp.com/notification', { subscription:token });
   }
